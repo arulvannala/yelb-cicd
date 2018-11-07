@@ -1,0 +1,17 @@
+---
+platform: linux
+
+image_resource:
+  type: registry-image
+  source: {repository: concourse/bin-docker-testflight-ci}
+
+inputs:
+- name: ubuntu-image
+- name: concourse-image-build-root
+- name: concourse-docker
+
+outputs:
+- name: concourse-image
+
+run:
+  path: concourse-docker/ci/build-image-rc

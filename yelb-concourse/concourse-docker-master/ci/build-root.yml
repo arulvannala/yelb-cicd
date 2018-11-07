@@ -1,0 +1,17 @@
+---
+platform: linux
+
+image_resource:
+  type: registry-image
+  source: {repository: ubuntu}
+
+inputs:
+- name: concourse-docker
+- name: dumb-init
+- name: bin-rc
+
+outputs:
+- name: concourse-image-build-root
+
+run:
+  path: concourse-docker/ci/build-root

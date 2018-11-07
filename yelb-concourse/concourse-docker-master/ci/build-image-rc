@@ -1,0 +1,15 @@
+#!/bin/bash
+
+set -e -u -x
+
+source concourse-docker/ci/common
+
+start_docker
+
+docker load -i ubuntu-image/image.tar
+
+pushd concourse-image-build-root
+  docker build -t concourse/concourse-rc:latest .
+popd
+
+docker save -o concourse-image/image.tar concourse/concourse-rc:latest

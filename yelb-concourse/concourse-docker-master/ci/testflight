@@ -1,0 +1,40 @@
+#!/bin/bash
+
+set -e -u -x
+
+source concourse-docker/ci/common
+
+start_docker
+
+docker load -i postgres-image/image.tar
+docker load -i concourse-image/image.tar
+
+docker tag concourse/concourse-rc concourse/concourse
+
+pushd concourse-docker
+  mkdir -p keys/web keys/worker
+
+  ssh-keygen -t rsa -f ./keys/web/tsa_host_key -N ''
+  ssh-keygen -t rsa -f ./keys/web/session_signing_key -N ''
+
+  ssh-keygen -t rsa -f ./keys/worker/worker_key -N ''
+
+  cp ./keys/worker/worker_key.pub ./keys/web/authorized_worker_keys
+  cp ./keys/web/tsa_host_key.pub ./keys/worker
+
+  # do not collide with outer Concourse network
+  export CONCOURSE_GARDEN_NETWORK="10.224.0.0/16"
+  export CONCOURSE_WORKER_GARDEN_NETWORK="10.224.0.0/16"
+
+  docker-compose -f ${DOCKER_COMPOSE_YML:-docker-compose.yml} up -d
+popd
+
+until test $(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:8080/api/v1/info) -eq 200; do
+  echo "waiting for ATC..."
+  sleep 1
+done
+
+export ATC_URL=http://127.0.0.1:8080
+export ATC_USERNAME=test
+export ATC_PASSWORD=test
+./concourse/ci/scripts/testflight "$@"

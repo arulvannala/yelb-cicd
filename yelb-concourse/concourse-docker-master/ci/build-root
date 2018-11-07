@@ -1,0 +1,10 @@
+#!/bin/bash
+
+set -e -u -x
+
+cp -a concourse-docker/* concourse-image-build-root/
+
+cp dumb-init/dumb-init_*_amd64 ./concourse-image-build-root/bin/dumb-init
+cp bin-rc/concourse_linux_amd64 ./concourse-image-build-root/bin/concourse
+
+chmod +x ./concourse-image-build-root/bin/*

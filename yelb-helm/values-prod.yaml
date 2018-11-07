@@ -1,0 +1,36 @@
+namespace: helmtest
+
+frontend:
+    service:
+         serviceType: LoadBalancer
+         port: 80
+         targetPort: 80
+    deployment:
+         replicas: 1
+         image: mreferre/yelb-ui:0.3
+         containerPort: 80
+cache:
+    service:
+         serviceType: ClusterIP
+         port: 6379
+    deployment:
+         replicas: 1
+         image: redis:4.0.2
+         containerPort: 6379
+
+appserver:
+    service:
+         serviceType: ClusterIP
+         port: 4567
+    deployment:
+         replicas: 1
+         image: mreferre/yelb-appserver:0.3
+         containerPort: 4567
+db:
+    service:
+         serviceType: ClusterIP
+         port: 4532
+    deployment:
+         replicas: 1
+         image: mreferre/yelb-db:0.3
+         containerPort: 4532

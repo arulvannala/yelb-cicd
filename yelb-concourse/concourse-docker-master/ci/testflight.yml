@@ -1,0 +1,19 @@
+---
+platform: linux
+
+image_resource:
+  type: registry-image
+  source: {repository: concourse/bin-docker-testflight-ci}
+
+inputs:
+- name: concourse-docker
+- name: concourse-image
+- name: postgres-image
+- name: concourse
+
+
+params:
+  DOCKER_COMPOSE_YML: docker-compose.yml
+
+run:
+  path: concourse-docker/ci/testflight

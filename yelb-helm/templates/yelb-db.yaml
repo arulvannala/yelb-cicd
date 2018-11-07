@@ -1,0 +1,36 @@
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: {{ .Values.namespace }}
+  name: yelb-db
+  labels:
+    app: yelb-db
+    tier: backenddb
+spec:
+  type: {{ .Values.db.service.serviceType }}
+  ports:
+  - port: {{ .Values.db.service.port }}
+  selector:
+    app: yelb-db
+    tier: backenddb
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  namespace: {{ .Values.namespace }}
+  name: yelb-db
+spec:
+  replicas: {{ .Values.db.deployment.replicas }}
+  template:
+    metadata:
+      labels:
+        app: yelb-db
+        tier: backenddb
+    spec:
+      containers:
+      - name: yelb-db
+        image:  {{ .Values.db.deployment.image }}
+        imagePullPolicyimage:  {{ .Values.db.deployment.imagePullPolicy }}
+        ports:
+        - containerPort: {{ .Values.db.deployment.containerPort }}
+

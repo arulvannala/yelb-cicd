@@ -1,0 +1,34 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  namespace: {{ .Values.namespace }}
+  name: yelb-appserver
+spec:
+  replicas: {{ .Values.appserver.service.replicas }}
+  template:
+    metadata:
+      labels:
+        app: yelb-appserver
+        tier: middletier
+    spec:
+      containers:
+      - name: yelb-appserver
+        image: {{ .Values.appserver.deployment.image }}
+        ports:
+        - containerPort: {{ .Values.appserver.deployment.containerPort }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: {{ .Values.namespace }}
+  name: yelb-appserver
+  labels:
+    app: yelb-appserver
+    tier: middletier
+spec:
+  type: {{ .Values.appserver.service.serviceType }}
+  ports:
+  - port: {{ .Values.appserver.service.port }}
+  selector:
+    app: yelb-appserver
+    tier: middletier
