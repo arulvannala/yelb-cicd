@@ -7,7 +7,8 @@ frontend:
          targetPort: 80
     deployment:
          replicas: 1
-         image: mreferre/yelb-ui:0.3
+         #image: mreferre/yelb-ui:0.3
+         image: ec2-35-154-147-30.ap-south-1.compute.amazonaws.com/cna-day/yelb-ui:1.0
          containerPort: 80
 cache:
     service:
@@ -15,7 +16,8 @@ cache:
          port: 6379
     deployment:
          replicas: 1
-         image: redis:4.0.2
+         #image: redis:4.0.2
+         image: ec2-35-154-147-30.ap-south-1.compute.amazonaws.com/cna-day/yelb-cache:1.0
          containerPort: 6379
 
 appserver:
@@ -25,12 +27,14 @@ appserver:
     deployment:
          replicas: 1
          image: mreferre/yelb-appserver:0.3
+         #image: ec2-35-154-147-30.ap-south-1.compute.amazonaws.com/cna-day/yelb-appserver:1.0
          containerPort: 4567
 db:
     service:
          serviceType: ClusterIP
-         port: 4532
+         port: 5432
     deployment:
          replicas: 1
-         image: mreferre/yelb-db:0.3
-         containerPort: 4532
+         #image: mreferre/yelb-db:0.3
+         image: ec2-35-154-147-30.ap-south-1.compute.amazonaws.com/cna-day/yelb-db:1.0
+         containerPort: 5432

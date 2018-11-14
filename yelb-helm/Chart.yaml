@@ -11,5 +11,5 @@ keywords:
 home: https://github.com/rejupillai/yelb-cicd
 sources:
 - https://github.com/rejupillai/yelb-cicd
-name: yelb-cicd
+name: yelb-helm
 engine: gotpl
